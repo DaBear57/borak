@@ -1,0 +1,27 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#box {
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+    margin: auto;
+
+    transition: width 3s, height 3s, background-color 3s, transform 3s;
+}
+
+#box:hover {
+    width: 400px;
+    height: 400px;
+    background-color: green;
+    transform: rotate(180deg);
+}

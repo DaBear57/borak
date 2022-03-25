@@ -54,19 +54,32 @@ public class test extends PApplet {
     	}
     	return progress == nums.length - 1;
     }
-    
-    public boolean quick() {
-    	if (index == 0) {
-    		qnums = nums.clone();
-    		if (qstack.size() == 0 && progress == 0) {
-    			pivot = qnums[0];
-    		} else if (qstack.size() == 0) {
-    			return true;
-    		} else {
-    			pivot = qstack.whatever
-    		}
-    	}
-    }
+
+	public boolean radix(int bits) {
+		if (index2 == bits) return true
+		if (index == nums.length) {
+			index = 0;
+			index2++;
+			qnums = nums.clone();
+			qless.clear();
+			qmore.clear();
+			for (int i : nums) {
+				qmore.add(i);
+			}
+		}
+		if (qnums[index] & (1 << index)) {
+			qless.add(qnums[index]);
+			qmore.remove((Integer) qnums[index]);
+		}
+		for (int i = 0; i < qless.size(); i++) {
+			nums[i] = qless.get(i);
+		}
+		for (int i = 0; i < nums.length; i++) {
+			nums[i] = qmore.get(i + qless.size());
+		}
+		index++;
+		return false;
+	}
     
     public void show(boolean done) {
     	for (int i = 0; i < nums.length; i++) {

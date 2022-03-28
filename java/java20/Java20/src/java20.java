@@ -1,14 +1,15 @@
 
 public class java20 {
-	public static void fib(int a, int b, int i) {
-		if (i == 0) {
-			return;
+	public static int fib(int a) {
+		if (a == 0 || a == 1) {
+			return 1;
 		}
-		System.out.println(a+b);
-		fib(a+b,a,i-1);
+		return fib(a-1) + fib(a-2);
 	}
 	
 	public static void main(String[] args) {
-		fib(0,1,20);
+		for (int i = 0; i < 20; i++) {
+			System.out.println(fib(i));
+		}
 	}
 }

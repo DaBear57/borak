@@ -13,8 +13,11 @@ public class test extends PApplet {
 	static int index = 0;
 	static int index2 = 0;
 	static int index3 = 0;
+	static int index4 = 0;
+	static int vis1 = -1;
+	static int vis2 = -1;
 	static int pivot = 0;
-	static int speed = 100;
+	static int speed = 3;
 	static int progress = 0;
 	static boolean fixed = false;
 
@@ -30,11 +33,16 @@ public class test extends PApplet {
 		}
 	}
 	
+	public void backwards() {
+		for (int i = 0; i < nums.length; i++) {
+			nums[i] = terms-i-1;
+		}
+	}
+	
     public void setup(){
     	noStroke();
     	frameRate(60);
         shuffle();
-        
     }
     
     public boolean bubble() {
@@ -45,6 +53,7 @@ public class test extends PApplet {
     	}
     	if (index == nums.length - progress - 2) progress++;
         index = (index + 1) % (nums.length - progress);
+        vis1 = index;
         return progress == nums.length - 1;
     }
     
@@ -69,6 +78,8 @@ public class test extends PApplet {
     	} else {
     		index2++;
     	}
+    	vis1 = index;
+    	vis2 = index2;
     	return progress == nums.length - 1;
     }
     
@@ -87,6 +98,7 @@ public class test extends PApplet {
     			return true;
     		} else {
     			pivot = qnums[qstarts.get(0)];
+    			vis2 = qstarts.get(0);
     		}
     		index = qstarts.get(0) + 1;
     		qless.clear();
@@ -126,6 +138,7 @@ public class test extends PApplet {
     		qends.remove(0);
     	}
     	
+    	vis1 = index;
     	return false;
     }
     
@@ -160,52 +173,57 @@ public class test extends PApplet {
 			nums[i + qless.size()] = qmore.get(i);
 		}
 		index++;
+		vis1 = index;
 		return false;
 	}
 
     public boolean bitonic() {
-    	//doesn't work :(
-    	if (!fixed) {
-    		index2 = 1;
-    		index3 = 2;
-    		fixed = true;
+    	while (true) {
+	    	if (!fixed) {
+	    		index4 = 1;
+	    		index3 = 1;
+	    		fixed = true;
+	    	}
+	    	
+	    	if ((index2 + index) / (index4 * 2) == (index2 + index + index3) / (index4 * 2)) {
+	    		if (nums[index2 + index] > nums[index2 + index + index3]) {
+	    			int temp = nums[index2 + index];
+	    			nums[index2 + index] = nums[index2 + index + index3];
+	    			nums[index2 + index + index3] = temp;
+	    			break;
+	    		}
+	    	}
+	    	
+	    	index++;
+	    	if (index >= terms - index2 - index3) {
+	    		index2 += 2 * index3;
+	    		index = 0;
+	    	}
+	    	if (index2 >= terms - index3) {
+	    		index3 /= 2;
+	    		index2 = index3 % index4;
+	    	}
+	    	if (index3 == 0) {
+	    		index4 *= 2;
+	    		index3 = index4;
+	    	}
+	    	if (index4 >= terms) {
+	    		return true;
+	    	}
     	}
-    	
-    	int l = index ^ index2;
-    	println(index,index2,index3,l);
-    	if (l > index) {
-    		if (((index & index3) == 0 && nums[index] > nums[l]
-    		  || (index & index3) != 0 && nums[index] < nums[l])) {
-    			int temp = nums[index];
-    			nums[index] = nums[l];
-    			nums[l] = temp;
-    		}
-    	}
-    	
-    	index++;
-    	if (index == terms) {
-    		index = 0;
-    		index2 = floor(index2 / 2);
-    	}
-    	if (index2 == 0) {
-    		index2 = index3 / 2;
-    		index3 *= 2;
-    	}
-    	if (index3 > terms) {
-    		return true;
-    	} else {
-    		return false;
-    	}
+    	vis1 = index2 + index;
+    	vis2 = index2 + index + index3;
+    	return false;
     }
     
     public void show(boolean done) {
     	for (int i = 0; i < nums.length; i++) {
     		if (done) {
     			fill(255,0,255);
-    		} else if (nums[i] == pivot) {
-    			fill(0,0,255);
-    		} else if (i == index) {
+    		} else if (i == vis1) {
     			fill(255,0,0);
+    		} else if (i == vis2) {
+    			fill(0,255,0);
     		} else {
     			fill(255);
     		}

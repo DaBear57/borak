@@ -82,6 +82,7 @@ public class test extends PApplet {
     	vis2 = index2;
     	return progress == nums.length - 1;
     }
+<<<<<<< HEAD
     
     public boolean quick() {
     	if (!fixed) {
@@ -152,6 +153,11 @@ public class test extends PApplet {
     	}
     	
 		if (index2 == bits) return true;
+=======
+
+	public boolean radix(int bits) {
+		if (index2 == bits) return true
+>>>>>>> 7ca78a19b28722688a6bca7e7df39bcfd02ca685
 		if (index == nums.length) {
 			index = 0;
 			index2++;
@@ -162,13 +168,18 @@ public class test extends PApplet {
 				qmore.add(i);
 			}
 		}
+<<<<<<< HEAD
 		if ((qnums[index] & (1 << index2)) == 0) {
+=======
+		if (qnums[index] & (1 << index)) {
+>>>>>>> 7ca78a19b28722688a6bca7e7df39bcfd02ca685
 			qless.add(qnums[index]);
 			qmore.remove((Integer) qnums[index]);
 		}
 		for (int i = 0; i < qless.size(); i++) {
 			nums[i] = qless.get(i);
 		}
+<<<<<<< HEAD
 		for (int i = 0; i < qmore.size(); i++) {
 			nums[i + qless.size()] = qmore.get(i);
 		}
@@ -215,6 +226,14 @@ public class test extends PApplet {
     	vis2 = index2 + index + index3;
     	return false;
     }
+=======
+		for (int i = 0; i < nums.length; i++) {
+			nums[i] = qmore.get(i + qless.size());
+		}
+		index++;
+		return false;
+	}
+>>>>>>> 7ca78a19b28722688a6bca7e7df39bcfd02ca685
     
     public void show(boolean done) {
     	for (int i = 0; i < nums.length; i++) {

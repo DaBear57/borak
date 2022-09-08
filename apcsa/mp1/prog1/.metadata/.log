@@ -1,0 +1,61 @@
+!SESSION 2022-09-07 11:14:49.735 -----------------------------------------------
+eclipse.buildId=4.16.0.I20200604-0540
+java.version=1.8.0_202
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.ui 2 0 2022-09-07 11:15:44.119
+!MESSAGE Warnings while parsing the images from the 'org.eclipse.ui.commandImages' extension point.
+!SUBENTRY 1 org.eclipse.ui 2 0 2022-09-07 11:15:44.119
+!MESSAGE Cannot bind to an undefined command: plug-in='com.genuitec.eclipse.theming.ui', id='com.genuitec.myeclipse.help.darktheme.commandid'
+
+!ENTRY com.genuitec.eclipse.theming.ui 1 0 2022-09-07 11:15:45.956
+!MESSAGE A DevStyle Theme is being activated on this workspace; preparing colors and configuration
+
+!ENTRY com.genuitec.eclipse.theming.ui 1 0 2022-09-07 11:15:45.970
+!MESSAGE DevStyle has archived current color configurations to alternate preferences - will be restored when switching out of the DevStyle Theme
+
+!ENTRY org.eclipse.jface 2 0 2022-09-07 11:15:47.626
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2022-09-07 11:15:47.626
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@240291d9,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@450f0d89,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2022-09-07 11:15:56.052
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'P:\'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY com.genuitec.eclipse.webclipse.evergreen 4 0 2022-09-07 11:31:51.593
+!MESSAGE Failed to apply update.
+!STACK 1
+org.eclipse.core.runtime.CoreException: An error occurred while installing the items
+	at com.genuitec.eclipse.webclipse.evergreen.internal.EvergreenUpdateProcess$FinishInstallation$1.run(EvergreenUpdateProcess.java:441)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:122)
+Contains: session context was:(profile=epp.package.java, phase=org.eclipse.equinox.internal.p2.engine.phases.Install, operand=[R]com.genuitec.eclipse.core.common.platform 13.0.2.202206131352 --> [R]com.genuitec.eclipse.core.common.platform 13.0.2.202206271604, action=org.eclipse.equinox.internal.p2.touchpoint.eclipse.actions.InstallBundleAction).
+Contains: The artifact file for osgi.bundle,com.genuitec.eclipse.core.common.platform,13.0.2.202206271604 was not found.
+!SUBENTRY 1 org.eclipse.equinox.p2.engine 4 4 2022-09-07 11:31:51.602
+!MESSAGE An error occurred while installing the items
+!SUBENTRY 2 org.eclipse.equinox.p2.engine 4 0 2022-09-07 11:31:51.602
+!MESSAGE session context was:(profile=epp.package.java, phase=org.eclipse.equinox.internal.p2.engine.phases.Install, operand=[R]com.genuitec.eclipse.core.common.platform 13.0.2.202206131352 --> [R]com.genuitec.eclipse.core.common.platform 13.0.2.202206271604, action=org.eclipse.equinox.internal.p2.touchpoint.eclipse.actions.InstallBundleAction).
+!SUBENTRY 2 org.eclipse.equinox.p2.touchpoint.eclipse 4 0 2022-09-07 11:31:51.602
+!MESSAGE The artifact file for osgi.bundle,com.genuitec.eclipse.core.common.platform,13.0.2.202206271604 was not found.

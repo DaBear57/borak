@@ -3,8 +3,8 @@ import java.util.ArrayList;
 import processing.core.*;
 
 public class Pathfinders extends PApplet {
-	static Cell[][] cells = new Cell[25][25];
-	static int cs = 20;
+	static Cell[][] cells = new Cell[129][229];
+	static int cs;
 	static boolean start = false;
 	Cell current;
 	Cell destination;
@@ -30,7 +30,12 @@ public class Pathfinders extends PApplet {
 		cells[(a.x + b.x) / 2][(a.y + b.y) / 2].isWall = false;
 	}
 	
+	public void settings(){
+        fullScreen();
+    }
+	
 	public void setup() {
+		cs = 7;
 		background(255,0,0);
 		rect(10,10,60,60);
 		for (int i = 0; i < cells.length; i++) {
@@ -65,11 +70,6 @@ public class Pathfinders extends PApplet {
 		beginning = cells[1][1];
 		current = beginning;
 		destination = cells[cells.length-2][cells[0].length-2];
-		for (int i = 0; i < cells.length; i++) {
-			for (int j = 0; j < cells[0].length; j++) {
-				cells[i][j].g = cells[i][j].chebyshev(destination);
-			}
-		}
 	}
 	
 	public void draw() {
@@ -107,40 +107,42 @@ public class Pathfinders extends PApplet {
 		}
 		
 		if (start) {
-			for (Cell neighbor : current.n) {
-				if (neighbor.tdist > current.tdist + neighbor.euclidean(current) && !neighbor.isWall && !neighbor.isVisited) {
-					neighbor.tdist = current.tdist + neighbor.euclidean(current);
-					neighbor.parent = current;
-				}
-			}
-			
-			current.isVisited = true;
-			if (destination.isVisited) {
-				destination.showPath(cs);
-				fill(255,0,0);
-				rect(beginning.x * cs,beginning.x * cs,cs,cs);
-				fill(0,255,0);
-				rect(destination.x*cs,destination.y*cs,cs,cs);
-				noLoop();
-			}
-			
-			float bdist = 999999;
-			Cell bcell = destination;
-			for (int i = 0; i < cells.length; i++) {
-				for (int j = 0; j < cells[0].length; j++) {
-					//dijkstra
-//					int cdist = cells[i][j].tdist;
-					
-					//a*
-					float cdist = cells[i][j].tdist + cells[i][j].g;
-					
-					if (cdist < bdist && !cells[i][j].isVisited && !cells[i][j].isWall) {
-						bdist = cdist;
-						bcell = cells[i][j];
+			for (int r = 0; r < 50; r++) {
+				for (Cell neighbor : current.n) {
+					if (neighbor.tdist > current.tdist + neighbor.euclidean(current) && !neighbor.isWall && !neighbor.isVisited) {
+						neighbor.tdist = current.tdist + neighbor.euclidean(current);
+						neighbor.parent = current;
 					}
 				}
+				
+				current.isVisited = true;
+				if (destination.isVisited) {
+					destination.showPath(cs);
+					fill(255,0,0);
+					rect(beginning.x * cs,beginning.x * cs,cs,cs);
+					fill(0,255,0);
+					rect(destination.x*cs,destination.y*cs,cs,cs);
+					noLoop();
+				}
+				
+				float bdist = 999999;
+				Cell bcell = destination;
+				for (int i = 0; i < cells.length; i++) {
+					for (int j = 0; j < cells[0].length; j++) {
+						//dijkstra
+						//float cdist = cells[i][j].tdist;
+						
+						//a*
+						float cdist = cells[i][j].tdist + cells[i][j].g;
+						
+						if (cdist < bdist && !cells[i][j].isVisited && !cells[i][j].isWall) {
+							bdist = cdist;
+							bcell = cells[i][j];
+						}
+					}
+				}
+				current = bcell;
 			}
-			current = bcell;
 		}
 		
 		if (!start && key == ' ' && keyPressed) {
@@ -179,6 +181,7 @@ public class Pathfinders extends PApplet {
 		if (key == 'm') {
 			//form grid
 			int n = 0;
+			ArrayList<Cell> edges = new ArrayList<Cell>();
 			for (int i = 1; i < cells.length; i++) {
 				for (int j = 1; j < cells[0].length; j++) {
 					if (!cells[i][j].isWall) {
@@ -187,27 +190,61 @@ public class Pathfinders extends PApplet {
 						}
 						cells[i][j].set = n;
 						n++;
+						
+						ArrayList<Cell> pedges = new ArrayList<Cell>();
+						pedges.add(cells[i+1][j]);
+						pedges.add(cells[i][j+1]);
+						pedges.add(cells[i-1][j]);
+						pedges.add(cells[i][j-1]);
+						
+						for (int k = 0; k < pedges.size(); k++) {
+							Cell pedge = pedges.get(k);
+							if (pedge.x < 1 || pedge.x >= cells[0].length - 1 || pedge.y < 1 || pedge.y >= cells.length - 1) {
+								continue;
+							}
+							if (edges.contains(pedge)) continue;
+							edges.add(pedge);
+							//-1 horiz, -2 vert
+							pedge.set -= k % 2;
+						}
 					}
 				}
 			}
 			
-			//init list of edges
-			ArrayList<Cell> edges = new ArrayList<Cell>();
-			for (int i = 1; i < cells.length - 1; i++) {
-				for (int j = 1; j < cells[0].length - 1; j++) {
-					Cell c = cells[i][j];
-					if (!c.isWall) continue;
-					if (i % 2 == 1) {}
+			//randomly remove borders
+			for (
+					int ie = floor(random(edges.size())); 
+					edges.size() > 0; 
+					ie = floor(random(edges.size()))
+				) {
+				Cell edge = edges.get(ie);
+				//println(edge.set);
+				//get bordering cells
+				Cell n1 = cells[edge.y-1][edge.x];
+				Cell n2 = cells[edge.y+1][edge.x];
+				 if (edge.set == -2) {
+					n1 = cells[edge.y][edge.x-1];
+					n2 = cells[edge.y][edge.x+1];
+				} else if (edge.set != -1) {
+					println("real bad");
 				}
+				
+				//remove border if in different sets
+				if (n1.set != n2.set) {
+					int old = n2.set;
+					for (Cell[] row : cells) {
+						for (Cell o : row) {
+							if (o.set == old) o.set = n1.set;
+						}
+					}
+					edge.isWall = false;
+				}
+				edges.remove(edge);
 			}
 		}
 	}
 	
 	public static void main(String[] args) {
         PApplet.main("Pathfinders");
-    }
-
-    public void settings(){
-        size(500, 500);
-    }
+	}
 }

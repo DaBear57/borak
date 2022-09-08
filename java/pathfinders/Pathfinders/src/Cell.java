@@ -29,12 +29,14 @@ public class Cell {
 	
 	public void show(int cs) {
 		p.fill(150);
+		p.noStroke();
 		if (!isVisited) p.fill(255);
 		if (isWall) p.fill(0);
 		p.rect(x*cs,y*cs,cs,cs);
 	}
 	
 	public void arrow(Cell b, boolean isPath, int cs) {
+		p.stroke(0);
 		p.strokeWeight(3);
 		if (isPath) {
 			p.stroke(255,255,0);
